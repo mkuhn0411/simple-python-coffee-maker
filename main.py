@@ -30,8 +30,6 @@ resources = {
     "coffee": 100,
 }
 
-money = 0
-
 coins = {
     "quarters": 0.25,
     "dimes": 0.10,
@@ -39,6 +37,7 @@ coins = {
     "pennies": 0.01
 }
 
+money = 0
 
 def print_resources():
     for item in resources:
