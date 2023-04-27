@@ -37,25 +37,26 @@ coins = {
     "pennies": 0.01
 }
 
-money = 0
+profit = 0
 
 def print_resources():
     for item in resources:
         unit = "g" if item.lower() == "coffee" else "ml"
         print(f"{item}: {resources[item]}{unit}")
-    print(f"Money: ${money}")
+    print(f"Profit: ${'{:.2f}'.format(round(profit))}")
 
 
 def get_money(item, item_cost):
     paid = 0
 
     while paid < item_cost:
+        if paid > 0:
+            rounded_paid = '{:.2f}'.format(round(paid, 2))
+            rounded_remainder = '{:.2f}'.format(round(item_cost - paid, 2))
+            print(f"You did not pay enough. You paid ${rounded_paid} but it costs ${'{:.2f}'.format(round(item_cost))}. Please pay ${rounded_remainder} more.")
         for coin in coins:
             amount_coin = int(input(f"How many {coin}?: "))
             paid += amount_coin * coins[coin]
-        rounded_paid = '{:.2f}'.format(round(paid, 2))
-        rounded_remainder = '{:.2f}'.format(round(item_cost - paid, 2))
-        print(f"You did not pay enough. You paid ${rounded_paid} but it costs ${'{:.2f}'.format(round(item_cost))}. Please pay ${rounded_remainder} more.")
 
     if paid > item_cost:
         change = '{:.2f}'.format(round(paid - item_cost, 2))
@@ -89,13 +90,15 @@ def handle_initial_ask():
         print_resources()
         return
     elif user_input == "off":
-        return False
+        return "shut off"
     elif user_input in MENU:
         can_make = check_can_make(user_input)
         if can_make:
             cost = MENU[user_input]["cost"]
             print(f"Great! The cost of a {user_input} is ${'{:.2f}'.format(round(cost))}. Please pay me.")
             get_money(user_input, cost)
+            global profit
+            profit += cost
             use_resources(user_input)
             return user_input
         else:
@@ -108,10 +111,10 @@ def run():
 
     while machine_on:
         item = handle_initial_ask()
-        if not item:
+        if item == "shut off":
             machine_on = False
 
-        item and print(f"{item} is ready! Please enjoy")
+        item and print(f"{item} ☕️ is ready! Please enjoy")
 
     print("Machine has been shut off for maintenance")
 
