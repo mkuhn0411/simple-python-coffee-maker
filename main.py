@@ -83,6 +83,12 @@ def check_can_make(item):
     return True
 
 
+def make_coffee(item, cost):
+    global profit
+    profit += cost
+    use_resources(item)
+    return
+
 def handle_initial_ask():
     user_input = input("What would you like? (expresso/latte/cappuccino): ").lower()
 
@@ -97,9 +103,7 @@ def handle_initial_ask():
             cost = MENU[user_input]["cost"]
             print(f"Great! The cost of a {user_input} is ${'{:.2f}'.format(round(cost))}. Please pay me.")
             get_money(user_input, cost)
-            global profit
-            profit += cost
-            use_resources(user_input)
+            make_coffee(user_input, cost)
             return user_input
         else:
             print("Sorry, we do not have enough ingredients to make this. Please try again later")
